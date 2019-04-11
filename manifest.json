@@ -1,0 +1,23 @@
+{
+  "name": "PayPal Checkout Generator",
+  "version": "1.0",
+  "description": "One stop PayPal Checkout Integration",
+  "page_action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "declarativeContent",
+    "activeTab",
+    "tabs",
+    "webNavigation",
+    "https://www.baidu.com/*"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "manifest_version": 2
+}
