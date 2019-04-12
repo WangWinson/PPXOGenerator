@@ -15,9 +15,7 @@
     "https://www.baidu.com/*"
   ],
   "background": {
-    "scripts": [
-      "background.js"
-    ]
+    "scripts": ["background.js"]
   },
   "manifest_version": 2
 }
