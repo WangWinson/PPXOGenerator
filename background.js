@@ -3,8 +3,7 @@
 const kMatchRule = {
   // Declare the rule conditions.
   conditions: [new chrome.declarativeContent.PageStateMatcher({
-    // pageUrl: { urlMatches: ["https://www.baidu.com/*"] },
-    pageUrl: { hostEquals: 'www.baidu.com' },
+    pageUrl: { urlMatches: "https://www.amazon.com/*" }
   })],
   // Shows the page action when the condition is met.
   actions: [new chrome.declarativeContent.ShowPageAction()]
@@ -44,3 +43,16 @@ chrome.runtime.onInstalled.addListener(function () {
 //   },
 //   // extraInfoSpec
 //   ["blocking"]);
+//
+chrome.browserAction.onClicked.addListener(function (tab) {
+
+  // chrome.tabs.insertCSS({
+  //   file: "/bulma/bulma.min.css"
+  // })
+
+  chrome.tabs.executeScript({
+    file: "/insertBtn.js",
+    allFrames: true
+  });
+
+});
