@@ -11,6 +11,7 @@
     "declarativeContent",
     "activeTab",
     "tabs",
+    "storage",
     "webNavigation",
     "https://www.baidu.com/*"
   ],

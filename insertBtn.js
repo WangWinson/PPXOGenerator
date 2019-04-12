@@ -1,24 +1,8 @@
-//insert SPB div
-var testform = document.getElementById("form");
-var testButton = document.createElement("div");
-testButton.innerHTML = '<div id="paypal-button-container">123</div>';
-testform.appendChild(testButton);
-
-//insert JS SDK
-var jssdk = document.createElement("script");
-jssdk.src = "https://www.paypal.com/sdk/js?client-id=sb&currency=USD";
-jssdk.onload = function() {
-  //once JS SDK loaded, insert render button script
-  var render = document.createElement("script");
-  render.text =
-    'paypal.Buttons.call(window["steps"]).render("#paypal-button-container");';
-  document.body.appendChild(render);
-};
-
+// define the order request
 //instead of making or JS as text, make these 2 event as original JS
 //later the param of actions.order.create would be generated based on
 //the shopping cart web page
-var steps = {
+let steps = {
   // Set up the transaction
   createOrder: function(data, actions) {
     return actions.order.create({
@@ -41,4 +25,35 @@ var steps = {
   }
 };
 
-document.body.appendChild(jssdk);
+chrome.storage.sync.get(["ppxosdkconfig"], result => {
+  console.log(result);
+  const sdkConfigs = result.ppxosdkconfig;
+  //insert SPB div
+  let sdkQueryParams = [];
+
+  for (const key in sdkConfigs) {
+    if (sdkConfigs.hasOwnProperty(key)) {
+      if (sdkConfigs[key]) {
+        sdkQueryParams.push(key + "=" + sdkConfigs[key]);
+      }
+    }
+  }
+  sdkQueryParams = sdkQueryParams.join("&");
+
+  const sdkSrc = " https://www.paypal.com/sdk/js?" + sdkQueryParams;
+  const testform = document.getElementById("form");
+  const testButton = document.createElement("div");
+  testButton.innerHTML = '<div id="paypal-button-container">123</div>';
+  testform.appendChild(testButton);
+  const jssdk = document.createElement("script");
+  jssdk.src = sdkSrc;
+  jssdk.onload = function() {
+    //once JS SDK loaded, insert render button script
+    const render = document.createElement("script");
+    render.text =
+      'paypal.Buttons.call(window["steps"]).render("#paypal-button-container");';
+    document.body.appendChild(render);
+  };
+
+  document.body.appendChild(jssdk);
+});
