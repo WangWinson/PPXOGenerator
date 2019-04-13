@@ -1,0 +1,33 @@
+{
+    "name": "PayPal Checkout Generator",
+    "version": "1.0",
+    "description": "One stop PayPal Checkout Integration",
+    "browser_action": {
+    //   "default_popup": "popup.html"
+    "default_icon": {
+        "19":"icon/pp_editor.png"
+    }
+    },
+    "permissions": [
+      "webRequest",
+      "webRequestBlocking",
+      "declarativeContent",
+      "activeTab",
+      "tabs",
+      "webNavigation",
+      "https://www.amazon.com/*"
+    ],
+    "background": {
+      "scripts": [
+        "background.js"
+      ]
+    },
+    "content_scripts": [
+        {
+          "matches": ["https://www.amazon.com/*"],
+          "css": ["bulma/bulma.min.css","prism/prism.css"],
+          "js": ["jquery/jquery-3.3.1.min.js","prism/prism.js"]
+        }
+      ],
+    "manifest_version": 2
+  }

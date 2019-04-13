@@ -12,6 +12,7 @@ Prism.languages.javascript = Prism.languages.extend("clike", { "class-name": [Pr
 
 var puDetails = null;
 var totalAmount = 0;
+var cartPageorNot = true;
 
 //Get Amazon product page detail
 function amazonDetail() {
@@ -21,11 +22,14 @@ function amazonDetail() {
     let description = '';
     let currency = '';
 
-    productname = $('#productTitle').text().substr(0, 100);
+    productname = $('#productTitle').text().trim().substr(0, 100);
     amount = $('#cerberus-data-metrics').attr('data-asin-price');
     // amount = $('#priceblock_ourprice').text();
     currency = $('#cerberus-data-metrics').attr('data-asin-currency-code');
-    quantity = parseInt($('#quantity').find("option:selected").text());
+    // if ($('#quantity') == null) itemQuantity = '1';
+    // else itemQuantity = $('#quantity').find("option:selected").val();
+    quantity = ($('#quantity').length == 0 ? "1" : $('#quantity').find("option:selected").val());
+    // console.log("quantity: " + quantity);
 
     let detail = {
         "unit_amount": { currency_code: currency, value: amount },
@@ -45,7 +49,7 @@ function amazonCartDetail() {
         let detail = {
             unit_amount: { currency_code: $(wholelist[index]).find(".sc-product-price").text().replace(/\s+/g, "").substr(0, 3), value: $(wholelist[index]).attr('data-price') },
             quantity: $(wholelist[index]).attr('data-quantity'),
-            name: $(wholelist[index]).find(".sc-product-title").text().replace(/^\s+|\s+$/g, "").substr(0, 100)
+            name: $(wholelist[index]).find(".sc-product-title").text().trim().replace(/^\s+|\s+$/g, "").substr(0, 100)
             // currency: $(wholelist[index]).find(".sc-product-price").text().replace(/\s+/g,"").substr(0,3)
         }
         details.push(detail)
@@ -80,9 +84,10 @@ if (document.getElementById("modal") != null) {
 else {
     //cart page
     if (location.href.indexOf("https://www.amazon.com/gp/cart/view.html") > -1) {
+        cartPageorNot = true;
         var details = amazonCartDetail();
         for (var i = 0, l = details.length; i < l; i++) {
-            totalAmount += details[i].unit_amount.value * details[i].quantity;
+            totalAmount += parseFloat(details[i].unit_amount.value) * parseInt(details[i].quantity);
         }
         puDetails =
             {
@@ -93,17 +98,17 @@ else {
                 items: details
             };
     }
-    //item page
+    //product page
     // else if (location.href.indexOf("pd_rd_i") > -1) {
     else {
-
+        cartPageorNot = false;
         var detail = amazonDetail();
 
         puDetails =
             {
                 amount: {
-                    value: (detail.unit_amount.value).toString(),
-                    breakdown: { item_total: { currency_code: detail.unit_amount.currency_code, value: detail.unit_amount.value } }
+                    value: (parseFloat(detail.unit_amount.value) * parseInt(detail.quantity)).toString(),
+                    breakdown: { item_total: { currency_code: detail.unit_amount.currency_code, value: (parseFloat(detail.unit_amount.value) * parseInt(detail.quantity)).toString() } }
                 },
                 items: [detail]
             };
@@ -111,11 +116,10 @@ else {
     console.log(puDetails);
     console.log(JSON.stringify(puDetails));
     var mod = `<div class="modal-background" id="modBg"></div>
-    <div class="modal-content" style="width:900px">
+    <div class="modal-content" style="width:1000px">
          <pre class="brush:html;toolbar:false language-html">
             <code class="language-html">
             &lt;!DOCTYPE html&gt;
-
             &lt;head&gt;
                 &lt;!-- Add meta tags for mobile and IE --&gt;
                 &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1&quot;&gt;
@@ -154,7 +158,7 @@ else {
             &lt;&#x2F;body&gt;
             </code>
         </pre>
-      <a class="button is-success" id="injectBtn">Inject Button to Page
+      <a class="button is-info" id="injectBtn" style="margin-left:35%">Inject Button to Page
       </a>
     </div>
     <button class="modal-close is-large" aria-label="close" id="closeBtn"></button>`;
@@ -211,10 +215,20 @@ document.getElementById("injectBtn").addEventListener("click", function () {
 //insert JS SDK
 function injectBtn() {
     var testButton = document.createElement('span');
-    testButton.innerHTML = '<div id="paypal-button-container" style="width:200px;text-align:center;"></div>';
-    // document.body.appendChild(testButton);
-    document.getElementById("activeCartViewForm").appendChild(testButton);
+    // testButton.className = "a-float-right";
 
+    // document.body.appendChild(testButton);
+    if (cartPageorNot)//SC page
+    {
+        testButton.innerHTML = '<div id="paypal-button-container" style="width:300px"></div>';
+        document.getElementById("gutterCartViewForm").appendChild(testButton);
+    }
+    else {//Product page
+        testButton.innerHTML = '<div id="paypal-button-container" style="width:250px"></div>';
+        // var featureDiv = document.getElementById("buybox");
+        // featureDiv.parentElement.insertBefore(testButton, featureDiv);
+        document.getElementById("buybox").appendChild(testButton);
+    }
     var jssdk = document.createElement('script');
     jssdk.src = 'https://www.paypal.com/sdk/js?client-id=sb&currency=USD';
     jssdk.onload = function () {
