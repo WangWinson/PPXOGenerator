@@ -27,7 +27,7 @@ let sdkSrcGen = () => {
 // e.g.: const targetEl = getTargetEl();
 
 const targetEl = "#paypal-button-container";
-let buttonConfig = {
+let buttonConfig = `{
   createOrder: function(data, actions) {
     return actions.order.create({
       purchase_units: [
@@ -44,27 +44,17 @@ let buttonConfig = {
       alert("Transaction completed by " + details.payer.name.given_name + "!");
     });
   }
-};
-
-let replacer = (key, value) => {
-  // if we get a function, give us the code for that function
-  if (typeof value === "function") {
-    return value.toString();
-  }
-  return value;
-};
-
-//TODO, generate the string representation for the buttonConfig object
-//For now just use JSON to do it.
-let buttonConfigCode = JSON.stringify(buttonConfig, replacer, 2);
+}`;
 
 let SPBRenderCodeGen = () => {
-  return `paypal.Buttons(${buttonConfigCode}).render(${targetEl});`;
+  return `paypal.Buttons(${buttonConfig}).render(${targetEl});`;
 };
 
 let SPBRenderGen = () => {
-  console.log(buttonConfig);
-  return `paypal.Buttons(${buttonConfig}).render(${targetEl});`;
+  console.log(eval("(" + buttonConfig + ")"));
+  return `paypal.Buttons(${eval(
+    "(" + buttonConfig + ")"
+  )}).render(${targetEl});`;
 };
 
 const paypalCodeGen = {

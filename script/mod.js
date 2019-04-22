@@ -10,7 +10,7 @@ export const SPBCode = `
     <div class="modal-content" with="1000px">
       <script src="${sdkSrc}"></script>
       <script>
-        ${SPBImplementCode}
+        ${SPBImplement}
       </script>
     </div>
   </div>
