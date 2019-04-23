@@ -1,7 +1,7 @@
-const script = document.createElement("script");
+let script = document.createElement("script");
 script.setAttribute("type", "module");
 script.setAttribute("src", chrome.extension.getURL("/script/insertBtn.js"));
-const head =
+let head =
   document.head ||
   document.getElementsByTagName("head")[0] ||
   document.documentElement;
