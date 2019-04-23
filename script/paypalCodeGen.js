@@ -26,8 +26,9 @@ let sdkSrcGen = () => {
 //TODO:Get the target to insert the SPB on the current web page
 // e.g.: const targetEl = getTargetEl();
 
-const targetEl = "#paypal-button-container";
-let buttonConfig = `{
+const targetElID = "paypal-button-container";
+let buttonConfig = `
+paypal.Buttons({
   createOrder: function(data, actions) {
     return actions.order.create({
       purchase_units: [
@@ -44,22 +45,14 @@ let buttonConfig = `{
       alert("Transaction completed by " + details.payer.name.given_name + "!");
     });
   }
-}`;
+}).render("#${targetElID}");`;
 
 let SPBRenderCodeGen = () => {
-  return `paypal.Buttons(${buttonConfig}).render(${targetEl});`;
-};
-
-let SPBRenderGen = () => {
-  console.log(eval("(" + buttonConfig + ")"));
-  return `paypal.Buttons(${eval(
-    "(" + buttonConfig + ")"
-  )}).render(${targetEl});`;
+  return buttonConfig;
 };
 
 const paypalCodeGen = {
   sdkSrcGen,
-  SPBRenderGen,
   SPBRenderCodeGen
 };
 
