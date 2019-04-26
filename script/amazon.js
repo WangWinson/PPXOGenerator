@@ -1,4 +1,15 @@
 export default {
+  getInsertTarget: function() {
+    let onCartPage = false;
+    if (
+      location.href.indexOf("https://www.amazon.com/gp/cart/view.html") > -1
+    ) {
+      onCartPage = true;
+    }
+
+    return onCartPage ? "gutterCartViewForm" : "buybox";
+  },
+
   amazonDetail: function() {
     let amount = "";
     let productname = "";
