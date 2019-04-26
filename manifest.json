@@ -25,7 +25,8 @@
     "script/insertBtn.js",
     "script/mod.js",
     "script/parameters.js",
-    "script/paypalCodeGen.js"
+    "script/paypalCodeGen.js",
+    "script/amazon.js"
   ],
   "content_scripts": [
     {
