@@ -15,3 +15,5 @@ if (
     document.documentElement;
   head.insertBefore(script, head.lastChild);
 }
+console.log(chrome.extension.getURL("/prism/prism.js"));
+console.log(chrome.extension.getURL("/prism/prism.css"));

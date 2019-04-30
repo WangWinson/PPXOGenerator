@@ -13,8 +13,21 @@ const SPBCode = `
 `;
 
 function createMod() {
+  const prismJS = document.createElement("script");
+  const prismCSS = document.createElement("link");
+  prismJS.src =
+    "chrome-extension://dnipieldnbmepadmcjebfdifapocnkpp/prism/prism.js";
+  prismCSS.rel = "stylesheet";
+  prismCSS.href =
+    "chrome-extension://dnipieldnbmepadmcjebfdifapocnkpp/prism/prism.css";
+  let head =
+    document.head ||
+    document.getElementsByTagName("head")[0] ||
+    document.documentElement;
+  head.insertBefore(prismCSS, head.lastChild);
   const previewContainer = document.createElement("dialog");
   previewContainer.id = "SPBCode-Preview";
+  previewContainer.appendChild(prismJS);
   const preFormat = document.createElement("pre");
   const codeTag = document.createElement("code");
   codeTag.className = "language-html";
