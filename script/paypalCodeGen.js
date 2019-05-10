@@ -55,7 +55,7 @@ if (onCartPage) {
               value: ${totalAmount.toFixed(2)},
               breakdown: {
                 item_total: {
-                  currency_code: ${cartDetails[0].unit_amount.currency_code},
+                  currency_code: "${cartDetails[0].unit_amount.currency_code}",
                   value: ${totalAmount.toFixed(2)}
                 }
               }
@@ -86,7 +86,7 @@ if (onCartPage) {
               value: ${totalAmount.toFixed(2)},
               breakdown: {
                 item_total: {
-                  currency_code: ${productDetials.unit_amount.currency_code},
+                  currency_code: "${productDetials.unit_amount.currency_code}",
                   value: ${totalAmount.toFixed(2)}
                 }
               }
