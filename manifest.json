@@ -2,8 +2,10 @@
   "name": "PayPal Checkout Generator",
   "version": "1.0",
   "description": "One stop PayPal Checkout Integration",
-  "page_action": {
-    "default_popup": "popup.html"
+  "browser_action": {
+    "default_icon": {
+      "19": "icon/pp_editor.png"
+    }
   },
   "permissions": [
     "webRequest",
@@ -11,11 +13,30 @@
     "declarativeContent",
     "activeTab",
     "tabs",
+    "storage",
     "webNavigation",
-    "https://www.baidu.com/*"
+    "https://www.baidu.com/*",
+    "https://www.amazon.com/*"
   ],
   "background": {
     "scripts": ["background.js"]
   },
+  "web_accessible_resources": [
+    "script/insertBtn.js",
+    "script/mod.js",
+    "script/parameters.js",
+    "script/paypalCodeGen.js",
+    "script/amazon.js",
+    "prism/prism.js",
+    "prism/prism.css"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.amazon.com/*", "https://www.baidu.com/*"],
+      "run_at": "document_idle",
+      "css": ["bulma/bulma.min.css"],
+      "js": ["jquery/jquery-3.3.1.min.js"]
+    }
+  ],
   "manifest_version": 2
 }

@@ -3,8 +3,9 @@ const kMatchRule = {
   // Declare the rule conditions.
   conditions: [
     new chrome.declarativeContent.PageStateMatcher({
-      // pageUrl: { urlMatches: ["https://www.baidu.com/*"] },
-      pageUrl: { hostEquals: "www.baidu.com" }
+      pageUrl: {
+        schemes: ["https://www.baidu.com/*", "https://www.amazon.com/*"]
+      }
     })
   ],
   // Shows the page action when the condition is met.
@@ -19,29 +20,9 @@ chrome.runtime.onInstalled.addListener(function() {
   });
 });
 
-// chrome.runtime.onMessage.addListener(
-//   function (request, sender, sendResponse) {
-//       sendResponse({ farewell: "Got it! :" + request.msg });
-//       if ('sdkloaded' !== request.msg) return;
-//       chrome.tabs.executeScript({
-//         file: "/renderBtn.js",
-//         allFrames: true
-//       });
-//   });
-
-// chrome.webRequest.onBeforeRequest.addListener(
-//   function(info) {
-//     console.log("Cat intercepted: " + info.url);
-//     // Redirect the lolcal request to a random loldog URL.
-//     var i = Math.round(Math.random() * loldogs.length);
-//     return {redirectUrl: loldogs[i]};
-//   },
-//   // filters
-//   {
-//     urls: [
-//       "https://i.chzbgr.com/*"
-//     ],
-//     types: ["image"]
-//   },
-//   // extraInfoSpec
-//   ["blocking"]);
+chrome.browserAction.onClicked.addListener(function(tab) {
+  chrome.tabs.executeScript({
+    file: "/main.js",
+    allFrames: true
+  });
+});
